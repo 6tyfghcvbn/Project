@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="static/css/result1.css">
+    <title>计算结果</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .result {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            position: relative;
+            text-align: center;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            margin: 10px auto;
+        }
+
+        .total-emission {
+            font-size: 1.4em;
+            margin: 25px 0;
+            color: var(--primary-color);
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .level-tag {
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: white;
+            margin-left: 15px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            display: inline-block;
+            vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
+
+        .level-tag:hover {
+            transform: scale(1.05);
+        }
+
+        .green { background: linear-gradient(45deg, #27ae60, #2ecc71); }
+        .blue { background: linear-gradient(45deg, #2980b9, #3498db); }
+        .red { background: linear-gradient(45deg, #c0392b, #e74c3c); }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 25px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid white;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: var(--secondary-color);
+            color: white !important;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .result {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .total-emission {
+                font-size: 1.2em;
+            }
+        }
+        /* 新增图表容器样式 */
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .chart-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="result">
+        {% if chart %}
+        <div id="chartContainer">
+            <h2>🌱 碳排放统计结果</h2>
+            <div class="total-emission">
+                总碳排放：<strong>{{ total }} kg CO₂</strong><br>
+                获得称号：
+                <span class="level-tag {{ 'green' if level == '节碳达人' }}
+                                     {{ 'blue' if level == '中级碳人' }}
+                                     {{ 'red' if level == '终极碳人' }}">
+                    {{ level }} ✨
+                </span>
+            </div>
+            <img src="data:image/png;base64,{{ chart }}" alt="碳排放图表">
+        </div>
+        {% else %}
+            <h2>🎉 恭喜您获得称号: {{ level }}</h2>
+            <div class="total-emission">
+                总排放量：<strong>{{ total }} kg CO₂</strong>
+            </div>
+            <img src="data:image/png;base64,{{ chart }}" alt="排放分析图">
+        {% endif %}
+        <a href="/">↩️算错了？ 重新计算</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>碳排放概览 - 成功页</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-image: url('{{ url_for('static', filename='static\images\background.jpg.png') }}');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        .top-right-buttons {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            color: #333;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover {
+            border-color: #2196F3;
+            color: #2196F3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+        }
+        .nav-btn i { font-size: 1.1rem; }
+        @media (max-width: 768px) {
+            .top-right-buttons { top: 1rem; right: 1rem; gap: 0.8rem; }
+            .nav-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 80px;
+        }
+        .wordcloud-container {
+            border: none;
+            background: transparent;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            max-height: 70vh;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+        .wordcloud-container:hover { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); }
+        .wordcloud-img {
+            max-width: 1200px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .wordcloud-error {
+            color: #ff4444;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        .fallback-img {  /* 备用图片样式 */
+            max-width: 600px;
+            height: auto;
+            opacity: 0.7;
+            position: absolute; /* 绝对定位 */
+            right: 0; /* 靠右对齐 */
+            top: 50%;
+            transform: rotate(270deg);
+        }
+        .wordcloud-container {
+            position: relative;
+            width: 100%; /* 宽度为100% */
+            height: 100vh; /* 高度为100%视口高度 */
+            padding: 0; /* 移除内边距 */
+            margin: 0; /* 移除外边距 */
+        }
+
+        .background-img {
+            position: fixed;
+            top: 0; /* 放置在底部 */
+            left: 0;
+            width: 100%;
+            height: 100%; /* 高度填满容器 */
+            background-image: url('{{ url_for('static', filename='images/background.jpg.png') }}');
+            background-size: cover;
+            opacity: 0.5; /* 半透明效果 */
+            z-index: -1; /* 确保在其他内容后面 */
+        }
+        .wordcloud-container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        z-index: 1; /* 设置较低的 z-index */
+        }
+
+        .map-container {
+            position: absolute; /* 绝对定位 */
+            top: 0; /* 覆盖在上方 */
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2; /* 设置较高的 z-index */
+        }
+
+
+        .ciyun-container {
+            flex: 1; /* 使其占据剩余空间 */
+            padding: 1rem; /* 添加内边距 */
+            position: absolute; /* 绝对定位 */
+            right: 0; /* 靠右对齐 */
+            top: 50%; /* 垂直居中 */
+            transform: translateY(-50%) scale(0.5) rotate(90deg); /* 垂直居中并缩放旋转 */
+        }
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- 右上角操作按钮 -->
+    <div class="top-right-buttons">
+        <button class="nav-btn" onclick="window.location.href='/CarbonAI'">
+            <i class="fas fa-robot"></i> AI对话
+        </button>
+        <button class="nav-btn" onclick="window.location.href='/input'">
+            <i class="fas fa-sliders-h"></i> 计算器
+        </button>
+        <!-- 新增：跳转至 gsfcopfl 页面 -->
+        <button class="nav-btn" onclick="window.location.href='/qxt'">
+            <i class="fas fa-chart-area"></i> 碳排放分布
+        </button>
+        <!-- 新增：跳转至 gsfnyjgfx 页面 -->
+        <button class="nav-btn" onclick="window.location.href='/bintu'">
+            <i class="fas fa-energy"></i> 能源结构分析
+        </button>
+        <!-- 新增：跳转至 ddd 页面 -->
+        <button class="nav-btn" onclick="window.location.href='/Dqp'">
+            <i class="fas fa-chart-3d"></i> 3D可视化分析
+        </button>
+        <button class="nav-btn" onclick="window.location.href='/logout'">
+            <i class="fas fa-sign-out-alt"></i> 退出登录
+        </button>
+    </div>
+
+    <div class="background-img"></div>
+
+
+
+    <div class="main-container" style="display: flex;">
+        <div class="map-container">
+            {% include 'ditu.html' %}
+        </div>
+        <div class="ciyun-container">
+            {% include 'ciyun.html' %}
+        </div>
+    </div>
+    </div>
+</body>
+</html>

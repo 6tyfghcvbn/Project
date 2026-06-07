@@ -1,0 +1,358 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+html, body {
+  font-family: 'Microsoft YaHei', 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  min-height: 100vh;
+  overflow-x: hidden !important;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.el-container {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.el-header {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  color: white;
+  padding: 0 30px;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.el-aside {
+  background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.el-aside .el-menu {
+  background: transparent;
+  border-right: none;
+}
+
+.el-aside .el-menu-item {
+  color: white !important;
+  border-radius: 8px;
+  margin: 8px 12px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.el-aside .el-menu-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white !important;
+  transform: translateX(4px);
+}
+
+.el-aside .el-menu-item.is-active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.5) 0%, rgba(139, 92, 246, 0.5) 100%);
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.el-aside .el-menu-item span {
+  color: inherit !important;
+}
+
+.el-aside .el-menu-item .el-icon {
+  color: inherit !important;
+}
+
+.el-main {
+  padding: 24px;
+}
+
+.course-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15);
+}
+
+.login-form {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.register-form {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title::before {
+  content: '';
+  width: 4px;
+  height: 30px;
+  background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 2px;
+}
+
+.header-section {
+  margin-bottom: 20px;
+}
+
+.search-section {
+  margin-bottom: 24px;
+}
+
+.search-input {
+  width: 320px;
+}
+
+.course-table {
+  margin-top: 16px;
+}
+
+.el-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.el-card__header {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 12px 12px 0 0;
+}
+
+.el-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.el-table th {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.el-table tr:hover {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.el-table .el-table__row {
+  transition: background 0.2s ease;
+}
+
+.el-input__wrapper {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.el-input__wrapper:hover {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.el-button--primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.el-button--primary:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.el-pagination {
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, white 0%, #f8fafc 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.stat-value {
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.stat-icon {
+  font-size: 24px;
+}
+
+.course-link {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.course-link:hover {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+.course-title-link {
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.course-title-link:hover {
+  color: #334155;
+  text-decoration: underline;
+}
+
+.search-btn {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  color: #1e293b !important;
+}
+
+.search-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.search-btn .el-icon {
+  color: #1e293b !important;
+}
+
+.search-btn {
+  position: relative;
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  color: #1e293b;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.search-btn::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #1e293b;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.search-btn::before {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 2px;
+  background-color: #1e293b;
+  transform: rotate(45deg);
+  top: 50%;
+  left: 50%;
+  margin-left: 5px;
+  margin-top: 4px;
+}
+
+.table-row-hover:hover {
+  background: rgba(99, 102, 241, 0.06);
+}
+
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+}
+
+.el-menu-vertical-demo {
+  border-right: none;
+}
+
+.app-container {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.fixed-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  overflow: hidden;
+  width: 200px;
+  max-width: 200px;
+}
+
+.main-content {
+  margin-left: 200px;
+  min-height: 100vh;
+  width: calc(100% - 200px);
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.fixed-sidebar .el-menu {
+  height: auto;
+  max-height: 100vh;
+  overflow: visible;
+}

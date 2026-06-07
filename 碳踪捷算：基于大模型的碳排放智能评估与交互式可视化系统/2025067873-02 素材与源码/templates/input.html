@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="static/css/input.css">
+    <title>碳足迹计算器</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* 增强布局样式 */
+        .container {
+            display: flex;
+            gap: 40px;
+            margin: 30px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .intro-section {
+            flex: 1;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            line-height: 1.6;
+        }
+
+        .intro-section h3 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5em;
+        }
+
+        form {
+            flex: 1;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 30px;
+                padding: 0 15px;
+            }
+
+            .intro-section, form {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin: 30px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* 增强介绍部分可读性 */
+        .intro-section p {
+            color: #4a4a4a;
+            margin: 1em 0;
+        }
+
+        .intro-section ul {
+            padding-left: 1.5em;
+            margin: 1em 0;
+        }
+
+        .intro-section li {
+            margin-bottom: 0.8em;
+            color: #555;
+        }
+        /* 基础重置与全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            color: #2d4059;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        /* 容器与标题样式 */
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 2rem;
+            font-size: 2.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 输入组布局优化 */
+        .input-group {
+            margin: 1.2rem 0;
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            color: #5a6978;
+        }
+
+        /* 输入字段美化 */
+        input[type="number"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e6eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-align: right;
+        }
+
+        input[type="number"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+            outline: none;
+        }
+
+        /* 输入框默认值为0的样式 */
+        input[type="number"]::placeholder {
+            color: #bdc3c7;
+            opacity: 1;
+        }
+
+        /* 输入框聚焦时隐藏默认值0 */
+        input[type="number"]:focus::placeholder {
+            color: transparent;
+        }
+
+        /* 输入框输入时去除前导0 */
+        input[type="number"]:invalid {
+            border-color: #e74c3c;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* 新增：输入框输入事件处理 */
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* 单位标签样式 */
+        .input-group span {
+            color: #7f8c8d;
+            min-width: 60px;
+            text-align: left;
+        }
+
+        /* 按钮样式优化 */
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .input-group {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            input[type="number"] {
+                width: 100%;
+            }
+
+            .input-group span {
+                text-align: right;
+            }
+        }
+
+        @media (max-width: 480px) {
+            form {
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* 特殊效果增强 */
+        input[type="number"]::placeholder {
+            color: #bdc3c7;
+            opacity: 1;
+        }
+
+        input[type="number"]:invalid {
+            border-color: #e74c3c;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+
+        /* ... 保持原有基础样式不变 ... */
+
+        /* 新增：介绍区块样式 */
+        .intro-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #4CAF50;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-section::before {
+            content: "🌍";
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2.5rem;
+            opacity: 0.1;
+        }
+
+        .intro-section h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .intro-section h3::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 40px;
+            height: 3px;
+            background: rgba(76, 175, 80, 0.3);
+        }
+
+        .intro-section p {
+            color: #5a6978;
+            margin-bottom: 1rem;
+            padding-left: 10px;
+        }
+
+        .intro-section ul {
+            margin: 1.2rem 0;
+            padding-left: 2rem;
+        }
+
+        .intro-section li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 25px;
+            color: #5a6978;
+        }
+
+        .intro-section li::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .intro-section {
+                margin: 1.5rem auto;
+                padding: 1.5rem;
+            }
+
+            .intro-section::before {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro-section {
+                padding: 1rem;
+            }
+
+            .intro-section h3 {
+                font-size: 1.3rem;
+            }
+
+            .intro-section li {
+                padding-left: 20px;
+            }
+        }
+
+        @media print {
+            body {
+                background-image: none !important;
+            }
+        }
+        /* ... 保持原有其他样式不变 ... */
+
+        /* 添加按钮悬停效果 */
+        button:hover {
+            background: #45a049 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 输入框焦点效果 */
+        input:focus {
+            outline: 2px solid #4CAF50;
+            border-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <h2>碳足迹计算器</h2>
+
+    <div class="container">
+        <!-- 左侧介绍部分 -->
+        <section class="intro-section">
+            <h3>🌍 什么是碳足迹？</h3>
+            <p>碳足迹（Carbon Footprint）是指个人、组织、事件或产品直接和间接产生的温室气体排放总量，通常以二氧化碳当量（CO₂e）为单位计算。通过计算碳足迹，我们可以：</p>
+            <ul>
+                <li>了解日常活动对环境的影响</li>
+                <li>识别主要的碳排放来源</li>
+                <li>制定有效的减排策略</li>
+                <li>为应对气候变化做出贡献</li>
+            </ul>
+
+            <h3>🌱 为什么要关注碳足迹？</h3>
+            <p>全球变暖正在加速气候变化，减少碳足迹可以帮助我们：</p>
+            <ul>
+                <li>减缓极端天气事件的发生</li>
+                <li>保护生态系统和生物多样性</li>
+                <li>促进可持续的经济发展</li>
+                <li>为后代创造更好的生活环境</li>
+            </ul>
+
+            <h3>📊 计算方法说明</h3>
+            <p>本计算器基于国际通用的排放因子进行估算，结合中国国情调整系数。计算结果包含：</p>
+            <ul>
+                <li>能源消耗（电力、燃气、水）</li>
+                <li>交通出行（不同交通工具的碳排放）</li>
+                <li>饮食消费（食物生产的碳成本）</li>
+                <li>衣物消费（纺织品生命周期排放）</li>
+            </ul>
+        </section>
+
+        <!-- 右侧表单部分 -->
+        <form action="/calculate" method="POST">
+            <!-- 能源消耗 -->
+            <fieldset class="category-group">
+                <legend>🏭 能源消耗</legend>
+                <div class="input-group">
+                    每月用电: <input type="number" step="0.1" name="value[]" placeholder="度/月" value=0>
+                    <span>度/月</span>
+                    <input type="hidden" name="category[]" value="每月用电">
+                </div>
+                <div class="input-group">
+                    每月用水: <input type="number" step="0.1" name="value[]" placeholder="吨/月" value=0>
+                    <span>吨/月</span>
+                    <input type="hidden" name="category[]" value="每月用水">
+                </div>
+                <div class="input-group">
+                    燃气使用: <input type="number" step="0.1" name="value[]" placeholder="立方米/月" value=0>
+                    <span>立方米/月</span>
+                    <input type="hidden" name="category[]" value="燃气使用">
+                </div>
+            </fieldset>
+
+            <!-- 交通出行 -->
+            <fieldset class="category-group">
+                <legend>🚗 交通出行</legend>
+                <div class="input-group">
+                    飞机: <input type="number" step="0.1" name="value[]" placeholder="千米/天" value=0>
+                    <span>千米/天</span>
+                    <input type="hidden" name="category[]" value="飞机">
+                </div>
+                <div class="input-group">
+                    汽车: <input type="number" step="0.1" name="value[]" placeholder="千米/天" value=0>
+                    <span>千米/天</span>
+                    <input type="hidden" name="category[]" value="汽车">
+                </div>
+                <div class="input-group">
+                    火车: <input type="number" step="0.1" name="value[]" placeholder="千米/天" value=0>
+                    <span>千米/天</span>
+                    <input type="hidden" name="category[]" value="火车">
+                </div>
+                <div class="input-group">
+                    公交: <input type="number" step="0.1" name="value[]" placeholder="千米/天" value=0>
+                    <span>千米/天</span>
+                    <input type="hidden" name="category[]" value="公交">
+                </div>
+                <div class="input-group">
+                    地铁: <input type="number" step="0.1" name="value[]" placeholder="千米/天" value=0>
+                    <span>千米/天</span>
+                    <input type="hidden" name="category[]" value="地铁">
+                </div>
+            </fieldset>
+
+            <!-- 饮食消费 -->
+            <fieldset class="category-group">
+                <legend>🍴 饮食消费</legend>
+                <div class="input-group">
+                    主食: <input type="number" step="0.1" name="value[]" placeholder="克/天" value=0>
+                    <span>克/天</span>
+                    <input type="hidden" name="category[]" value="主食">
+                </div>
+                <div class="input-group">
+                    肉类: <input type="number" step="0.1" name="value[]" placeholder="克/天" value=0>
+                    <span>克/天</span>
+                    <input type="hidden" name="category[]" value="肉类">
+                </div>
+            </fieldset>
+
+            <!-- 衣物消费 -->
+            <fieldset class="category-group">
+                <legend>👕 衣物消费</legend>
+                <div class="input-group">
+                    棉质衣物: <input type="number" step="0.1" name="value[]" placeholder="件" value=0>
+                    <span>件</span>
+                    <input type="hidden" name="category[]" value="棉质衣物">
+                </div>
+                <div class="input-group">
+                    化纤衣物: <input type="number" step="0.1" name="value[]" placeholder="件" value=0>
+                    <span>件</span>
+                    <input type="hidden" name="category[]" value="化纤衣物">
+                </div>
+                <div class="input-group">
+                    混纺衣物: <input type="number" step="0.1" name="value[]" placeholder="件" value=0>
+                    <span>件</span>
+                    <input type="hidden" name="category[]" value="混纺衣物">
+                </div>
+            </fieldset>
+
+            <button type="submit" style="margin-top:20px; width:100%; padding:12px; background:#4CAF50; color:white; border:none; border-radius:6px; cursor:pointer;">
+                立即计算我的碳足迹
+            </button>
+        </form>
+    </div>
+
+    <script src="static/js/form.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+
+            inputs.forEach(input => {
+                // 设置默认值为0
+                input.value = 0;
+
+                // 聚焦时清空默认值
+                input.addEventListener('focus', function() {
+                    if (this.value == 0) {
+                        this.value = '';
+                    }
+                });
+
+                // 失焦时如果为空则重置为0
+                input.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.value = 0;
+                    }
+                });
+
+                // 输入时去除前导0
+                input.addEventListener('input', function() {
+                    this.value = this.value.replace(/^0+(?=\d)/, '');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

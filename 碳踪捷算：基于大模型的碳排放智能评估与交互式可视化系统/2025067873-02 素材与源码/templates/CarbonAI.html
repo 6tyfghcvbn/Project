@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarbonAI 碳足迹专家系统</title>
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #81C784;
+            --primary-dark: #1B5E20;
+            --background: #F8F9FA;
+            --surface: #FFFFFF;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --border-radius: 12px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --font-size-sm: 0.875rem;
+            --font-size-md: 1rem;
+            --font-size-lg: 1.25rem;
+            --font-size-xl: 1.5rem;
+            --font-size-xxl: 2rem;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: local('Inter'), local('Inter-Regular');
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: local('Inter Medium'), local('Inter-Medium');
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: local('Inter Bold'), local('Inter-Bold');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: var(--spacing-md);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: var(--font-size-xxl);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: var(--font-size-md);
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .badge i {
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--spacing-md);
+            padding: var(--spacing-xl);
+        }
+
+        .sidebar {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+            position: sticky;
+            top: var(--spacing-xl);
+        }
+
+        .sidebar h2 {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) transparent;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background-color: var(--primary-light);
+            border-radius: 3px;
+        }
+
+        .history-item {
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+            box-shadow: var(--shadow-sm);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .history-item:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .history-item .time {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .history-item:hover .time {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .history-item .preview {
+            font-size: var(--font-size-sm);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-clamp: 2; /* 添加标准属性 */
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .chat-window {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            height: 500px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            animation: messageIn 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes messageIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-top-right-radius: var(--spacing-xs) !important;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: white;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+            border-top-left-radius: var(--spacing-xs) !important;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .message-header .name {
+            font-weight: 600;
+        }
+
+        .message-header .time {
+            font-size: var(--font-size-sm);
+            opacity: 0.7;
+        }
+
+        .message-content {
+            line-height: 1.6;
+        }
+
+        .message-content p {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .input-area {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .input-area textarea {
+            flex: 1;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            border: 1px solid #E0E0E0;
+            resize: none;
+            font-family: inherit;
+            font-size: var(--font-size-md);
+            transition: var(--transition);
+            min-height: 80px;
+        }
+
+        .input-area textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+        }
+
+        .send-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0 var(--spacing-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .send-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .send-button:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            background: var(--glass-bg);
+            padding: var(--spacing-md);
+            text-align: center;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .response-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+        }
+
+        .source-tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-size: var(--font-size-sm);
+            margin-top: var(--spacing-md);
+            font-weight: 500;
+        }
+
+        /* 图标字体 */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-history::before {
+            content: '🕒';
+        }
+
+        .icon-iso::before {
+            content: '🏷️';
+        }
+
+        .icon-ghg::before {
+            content: '🌍';
+        }
+
+        .icon-ipcc::before {
+            content: '📊';
+        }
+
+        .icon-send::before {
+            content: '✉️';
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                margin-bottom: var(--spacing-md);
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* 卡片动画 */
+        .card-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 延迟动画 */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* 删除模态框样式 */
+        .modal {
+            display: none;
+        }
+        .modal-content {
+            display: none;
+        }
+        .close-modal {
+            display: none;
+        }
+        .file-link {
+            display: none;
+        }
+
+        #upload-status {
+            margin-top: var(--spacing-sm);
+        }
+
+        /* 修改切换按钮的样式，使其与发送按钮颜色一致 */
+        .toggle-file-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0 var(--spacing-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .toggle-file-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .toggle-file-button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CarbonAI 碳足迹专家系统</h1>
+            <p>专业碳足迹计算与生命周期评估解决方案</p>
+            <div class="badge-container">
+                <div class="badge"><i class="icon icon-iso"></i> ISO 14064认证</div>
+                <div class="badge"><i class="icon icon-ghg"></i> GHG Protocol标准</div>
+                <div class="badge"><i class="icon icon-ipcc"></i> IPCC 2023排放因子库</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar card-animate delay-1">
+                <h2><i class="icon icon-history"></i> 对话历史</h2>
+                <div class="history-list" id="history">
+                    <!-- 历史记录将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-window" id="chat-output">
+                    <div class="message bot-message card-animate delay-2">
+                        <div class="message-header">
+                            <div class="name">CarbonAI</div>
+                            <div class="time">刚刚</div>
+                        </div>
+                        <div class="message-content">
+                            <p>您好！我是CarbonAI碳足迹专家系统，可以为您提供专业的碳排放计算和分析服务。</p>
+                            <p>您可以询问类似这样的问题：</p>
+                            <ul>
+                                <li>"计算100kWh电力在CN地区的排放"</li>
+                                <li>"比较电动汽车与传统汽车的碳足迹"</li>
+                                <li>"解释范围1、2、3排放的区别"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area card-animate delay-3">
+                    <textarea id="user-input" placeholder="请输入碳计算问题（示例：计算100kWh电力在CN地区的排放）"></textarea>
+                    <button class="toggle-file-button" id="toggle-file-btn">
+                        <i class="icon icon-file"></i> 读取文件数据
+                    </button>
+                    <button class="send-button" id="send-btn">
+                        <i class="icon icon-send"></i> 发送
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>讯飞星火大模型</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const chatOutput = document.getElementById('chat-output');
+            const historyList = document.getElementById('history');
+
+            // 添加状态显示功能
+            const statusDisplay = document.createElement('div');
+            statusDisplay.id = 'status-display';
+            statusDisplay.style.position = 'fixed';
+            statusDisplay.style.bottom = '10px';
+            statusDisplay.style.right = '10px';
+            statusDisplay.style.padding = '10px';
+            statusDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            statusDisplay.style.color = 'white';
+            statusDisplay.style.borderRadius = '5px';
+            statusDisplay.style.display = 'none';
+            document.body.appendChild(statusDisplay);
+
+            function updateStatus(message, isVisible = true) {
+                statusDisplay.textContent = message;
+                statusDisplay.style.display = isVisible ? 'block' : 'none';
+            }
+
+            // 添加切换是否读取文件数据的功能
+            let useFileData = false;
+
+            const toggleFileButton = document.getElementById('toggle-file-btn');
+            toggleFileButton.addEventListener('click', () => {
+                useFileData = !useFileData;
+                toggleFileButton.textContent = useFileData ? '不读取文件数据' : '读取文件数据';
+            });
+
+            // 修改 sendMessage 函数，删除对话历史中的状态栏，但保留聊天记录中的状态栏
+            const sendMessage = async () => {
+                const message = userInput.value.trim();
+                if (!message) return;
+
+                // 创建用户消息的容器
+                const userMessageContainer = document.createElement('div');
+                userMessageContainer.className = 'message-container';
+
+                // 添加用户消息到聊天窗口
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message card-animate delay-1';
+                userMessage.innerHTML = `
+                    <div class="message-header">
+                        <div class="name">用户</div>
+                        <div class="time">刚刚</div>
+                    </div>
+                    <div class="message-content">
+                        <p>${message}</p>
+                    </div>
+                `;
+                userMessageContainer.appendChild(userMessage);
+
+                // 添加状态显示到用户消息下面
+                const statusMessage = document.createElement('div');
+                statusMessage.className = 'status-message';
+                statusMessage.textContent = '正在思考...';
+                userMessageContainer.appendChild(statusMessage);
+
+                chatOutput.appendChild(userMessageContainer);
+
+                // 同步用户消息到对话历史
+                const historyItem = userMessageContainer.cloneNode(true);
+                const historyStatus = historyItem.querySelector('.status-message');
+                if (historyStatus) {
+                    historyStatus.remove(); // 删除对话历史中的状态栏
+                }
+                historyList.insertBefore(historyItem, historyList.firstChild);
+
+                // 滚动到聊天窗口底部
+                chatOutput.scrollTop = chatOutput.scrollHeight;
+
+                // 清空输入框
+                userInput.value = '';
+
+                const requestData = { message };
+                if (useFileData) {
+                    requestData.useFileData = true;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:8000/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error(`请求失败，状态码: ${response.status}, 错误信息: ${errorText}`);
+                        statusMessage.textContent = '服务器繁忙';
+                        throw new Error('请求失败');
+                    }
+
+                    const data = await response.json();
+
+                    if (!data.response) {
+                        throw new Error('AI 回复为空，请检查后端逻辑');
+                    }
+
+                    // 添加AI回复到用户消息的容器中
+                    const botMessage = document.createElement('div');
+                    botMessage.className = 'message bot-message card-animate delay-2';
+                    botMessage.innerHTML = `
+                        <div class="message-header">
+                            <div class="name">CarbonAI</div>
+                            <div class="time">刚刚</div>
+                        </div>
+                        <div class="message-content">
+                            <p>${data.response}</p>
+                        </div>
+                    `;
+                    userMessageContainer.appendChild(botMessage);
+
+                    // 同步AI回复到对话历史
+                    const botHistoryItem = botMessage.cloneNode(true);
+                    historyItem.appendChild(botHistoryItem);
+
+                    // 更新状态为回答完毕
+                    statusMessage.textContent = '回答完毕';
+                    setTimeout(() => statusMessage.remove(), 2000);
+
+                    // 滚动到聊天窗口底部
+                    chatOutput.scrollTop = chatOutput.scrollHeight;
+                } catch (error) {
+                    console.error('请求出错:', error);
+                    statusMessage.textContent = '服务器繁忙';
+                    setTimeout(() => statusMessage.remove(), 2000);
+                }
+            };
+
+            // 添加解压缩 gzip 数据的功能
+            async function uploadAndProcessExcel(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('http://localhost:8000/upload_excel', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`上传失败，状态码: ${response.status}`);
+                    }
+
+                    // 获取压缩的响应数据
+                    const compressedData = await response.arrayBuffer();
+
+                    // 解压缩 gzip 数据
+                    const decompressedData = new TextDecoder('utf-8').decode(pako.inflate(new Uint8Array(compressedData)));
+                    const jsonData = JSON.parse(decompressedData);
+
+                    console.log('解压后的 JSON 数据:', jsonData);
+                    return jsonData;
+                } catch (error) {
+                    console.error('处理 Excel 文件时出错:', error);
+                    throw error;
+                }
+            }
+
+            // 点击发送按钮时发送消息
+            sendBtn.addEventListener('click', sendMessage);
+
+            // 按回车键时发送消息
+            userInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // 阻止默认的换行行为
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
