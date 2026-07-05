@@ -392,7 +392,7 @@
 ## 项目结构
 
 ```
-d:\mysql\daima\高教智选/
+./
 ├── src/                          # 前端源代码
 │   ├── components/               # Vue组件
 │   │   ├── AvatarSettings.vue    # 头像设置组件
@@ -495,6 +495,73 @@ MEMORY_TTL=3600
 | MEMORY_WINDOW_SIZE | 对话滑动窗口大小 | 10 |
 | MEMORY_ENABLE_SUMMARY | 是否启用对话摘要 | true |
 | MEMORY_TTL | 会话过期时间（秒） | 3600 |
+
+### 配置步骤
+
+#### 1. 配置讯飞星火API密钥
+
+**文件**: `.env` 第1行  
+**配置项**: `SPARK_API_PASSWORD`  
+**当前内容**: `SPARK_API_PASSWORD=your_api_password`  
+**需要更改为**: `SPARK_API_PASSWORD=你的appid:你的apisecret`  
+**获取方式**:  
+- 访问 [科大讯飞开放平台](https://www.xfyun.cn/)
+- 注册并登录账号
+- 创建应用，选择"星火大模型"服务
+- 在应用管理中获取 `APPID` 和 `APISecret`
+- 将两者拼接为 `APPID:APISecret` 格式填入
+
+#### 2. 配置数据库密码
+
+**文件**: `.env` 第6行  
+**配置项**: `DB_PASSWORD`  
+**当前内容**: `DB_PASSWORD=your_password`  
+**需要更改为**: `DB_PASSWORD=你的MySQL密码`  
+**获取方式**:  
+- 使用本地MySQL数据库的root用户密码
+- 确保MySQL服务已启动且可访问
+- 数据库名称默认为 `nocourse`，可在第7行 `DB_DATABASE` 修改
+
+#### 3. 数据库连接配置（可选）
+
+**文件**: `.env` 第4-8行  
+**配置项**: `DB_HOST`, `DB_USER`, `DB_PORT`  
+**默认值**:  
+- `DB_HOST=127.0.0.1`（本地数据库）
+- `DB_USER=root`（MySQL默认管理员账号）
+- `DB_PORT=3306`（MySQL默认端口）  
+**修改场景**: 如果使用远程数据库或非默认端口，需要相应修改
+
+#### 4. 爬虫脚本数据库配置
+
+**文件**: `spider.py` 第14-18行  
+**配置项**: 数据库连接参数  
+**说明**: 爬虫脚本已配置为从 `.env` 文件读取数据库连接信息，无需单独修改。确保 `.env` 文件配置正确后，爬虫会自动使用相同的数据库连接。
+
+### 启动前准备
+
+#### 1. 创建MySQL数据库
+
+在启动应用之前，需要先创建名为 `nocourse` 的数据库：
+
+```sql
+CREATE DATABASE IF NOT EXISTS nocourse DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+**说明**: 应用启动时会自动创建 `users` 和 `chat_history` 表，但 `course` 表需要通过爬虫脚本创建和填充。
+
+#### 2. 爬取课程数据
+
+配置好数据库后，运行爬虫脚本获取课程数据：
+
+```bash
+python spider.py
+```
+
+**说明**: 
+- 爬虫会自动创建 `course` 表并填充课程数据
+- 需要安装 `selenium` 库（已包含在 `requirements.txt` 中）
+- 需要安装 Chrome 浏览器和对应版本的 ChromeDriver
 
 ---
 
