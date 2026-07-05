@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styleprovince.css">
+</head>
+<body>
+    <header>  
+        <h2 class="site-title">二手车估价平台</h2>  
+        <nav class="navbar">  
+            <ul>  
+                <li><a href="index.html" target="_self" >首页</a></li>  
+                <li><a href="predict.html" target="_self">在线预测</a></li>  
+            </ul>
+            <li>
+                <a href="#" id="province-link" target="_self">省份信息</a>
+                <div id="province-dropdown" class="dropdown hidden">
+                    <div class="province-list">
+                        <a href="beijing.html">北京</a>
+                        <a href="shanghai.html">上海</a>
+                        <a href="shanxi.html">山西</a>
+                        <a href="liaoning.html">辽宁</a>
+                        <a href="jilin.html">吉林</a>
+                        <a href="heilongjiang.html">黑龙江</a>
+                        <a href="jiangsu.html">江苏</a>
+                        <a href="zhejiang.html">浙江</a>
+                        <a href="anhui.html">安徽</a>
+                        <a href="fujian.html">福建</a>
+                        <a href="jiangxi.html">江西</a>
+                        <a href="shandong.html">山东</a>
+                        <a href="henan.html">河南</a>
+                        <a href="hubei.html">湖北</a>
+                        <a href="hunan.html">湖南</a>
+                        <a href="guangdong.html">广东</a>
+                        <a href="hainan.html">海南</a>
+                        <a href="sichuan.html">四川</a>
+                        <a href="guizhou.html">贵州</a>
+                        <a href="yunnan.html">云南</a>
+                        <a href="shaanxi.html">陕西</a>
+                        <a href="gansu.html">甘肃</a>
+                        <a href="qinghai.html">青海</a>
+                        <a href="taiwan.html">台湾</a>
+                        <a href="neimenggu.html">内蒙古</a>
+                        <a href="guangxi.html">广西</a>
+                        <a href="xizang.html">西藏</a>
+                        <a href="ningxia.html">宁夏</a>
+                        <a href="xinjiang.html">新疆</a>
+                        <a href="hongkong.html">香港</a>
+                        <a href="aomen.html">澳门</a>
+                        <a href="tianjin.html">天津</a>
+                        <a href="chongqin.html">重庆</a>
+                    </div>
+                </div>
+            </li>
+        </nav>  
+    </header>
+    <div class="container">
+        <div class="left">
+            <iframe src="my_charts\西藏3.html"></iframe>
+            <iframe src="my_charts\西藏4.html"></iframe>
+        </div>
+        <div class="center">
+            <iframe src="my_charts\3D全国.html"></iframe>
+            <iframe src="my_charts\西藏自治区.html"></iframe>
+        </div>
+        <div class="right">
+            <iframe src="my_charts\西藏2.html"></iframe>
+            <img src="img\微信图片_20240414190059.png" alt="图片描述">
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const provinceLink = document.getElementById('province-link');
+        const provinceDropdown = document.getElementById('province-dropdown');
+
+        // 省份链接 mouseover 事件处理程序
+        const showProvinceDropdown = function () {
+            provinceDropdown.classList.remove('hidden');
+        };
+
+        // 省份链接 mouseout 事件处理程序
+        const hideProvinceDropdownFromLink = function (event) {
+            if (!provinceDropdown.contains(event.relatedTarget)) {
+                hideProvinceDropdown();
+            }
+        };
+
+        // 省份列表 mouseout 事件处理程序
+        const checkMouseLeaveProvinceDropdown = function (event) {
+            const rect = provinceDropdown.getBoundingClientRect();
+            const isOutsideDropdown = (
+                event.clientX < rect.left ||
+                event.clientX > rect.right ||
+                event.clientY < rect.top ||
+                event.clientY > rect.bottom
+            );
+
+            if (isOutsideDropdown && !provinceLink.contains(event.relatedTarget)) {
+                hideProvinceDropdown();
+            }
+        };
+
+        // 隐藏省份列表的通用函数
+        const hideProvinceDropdown = function () {
+            provinceDropdown.classList.add('hidden');
+        };
+
+        // 添加事件监听器
+        provinceLink.addEventListener('mouseover', showProvinceDropdown);
+        provinceLink.addEventListener('mouseout', hideProvinceDropdownFromLink);
+        provinceDropdown.addEventListener('mouseout', checkMouseLeaveProvinceDropdown);
+    });
+</script>
+</html>

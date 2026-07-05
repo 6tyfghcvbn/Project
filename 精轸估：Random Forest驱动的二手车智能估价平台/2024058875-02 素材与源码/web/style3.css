@@ -1,0 +1,7 @@
+body {  
+    margin: 0;  
+    padding: 0;  
+    background-image: url(img/map_bg.jpg);  
+    background-size: cover;  /* 根据窗口大小调整背景图的大小 */  
+    background-attachment: fixed;  /* 背景图片固定不动，页面内容滚动时背景不动 */
+}

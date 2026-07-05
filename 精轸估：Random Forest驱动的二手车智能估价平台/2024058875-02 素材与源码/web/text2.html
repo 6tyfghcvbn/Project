@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register Page</title>
+    <link rel="stylesheet" href="style2.css"> 
+</head>
+<body>
+    <div class="login-container">
+        <h2 id="loginTitle">登录</h2>
+        <input type="text" id="username" placeholder="用户名" required>
+        <input type="password" id="password" placeholder="密码" required>
+        <button id="loginBtn">登录</button>
+        <button id="switchToRegisterBtn">注册</button>
+        <div id="loginMessage"></div>
+    </div>
+
+    <div class="register-container">
+        <h2>注册</h2>
+        <input type="text" id="registerUsername" placeholder="用户名" required>
+        <input type="password" id="registerPassword" placeholder="密码" required>
+        <input type="email" id="registerEmail" placeholder="电子邮箱" required>
+        <button id="registerSubmitBtn">注册</button>
+        <!-- 在注册容器内添加返回登录按钮 -->
+        <button id="backToLogin">返回登录</button>
+        <div id="registerMessage"></div>
+    </div>
+    <script>  
+        // 更改登录界面注册按钮为切换至注册界面的功能
+        document.getElementById('switchToRegisterBtn').addEventListener('click', function () {
+            document.querySelector('.login-container').style.display = 'none';
+            document.querySelector('.register-container').style.display = 'block';
+        });
+
+        // 可选：添加返回登录按钮的事件处理
+        document.getElementById('backToLogin').addEventListener('click', function () {
+            document.querySelector('.login-container').style.display = 'block';
+            document.querySelector('.register-container').style.display = 'none';
+        });
+
+        // 发送登录请求的异步函数  
+        async function sendLoginRequest(username, password) {  
+            const response = await fetch('http://117.72.35.241:3000/api/login', {  
+                method: 'POST',  
+                headers: { 'Content-Type': 'application/json' },  
+                body: JSON.stringify({ username, password }),  
+            });  
+
+            if (!response.ok) {  
+                throw new Error('登录失败，请重试');
+            }  
+
+            const data = await response.json();  
+            return data;  
+        }  
+
+        // 发送注册请求的异步函数  
+        async function sendRegisterRequest(username, password, email) {
+            const response = await fetch('http://117.72.35.241:3000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, email }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || '注册过程中发生未知错误');
+            }
+
+            const data = await response.json();
+            return data;
+        }  
+
+        // 为登录按钮添加点击事件监听器  
+        document.getElementById('loginBtn').addEventListener('click', async function () {  
+            const username = document.getElementById('username').value.trim();  
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                document.getElementById('loginMessage').innerText = '用户名和密码不能为空';
+                return;
+            }  
+
+            try {  
+                const loginData = await sendLoginRequest(username, password);  
+                document.getElementById('loginMessage').innerText = loginData.message || '登录成功';  
+                // 假设登录成功后会跳转到其他页面  
+                if (loginData.status === 'success') {  
+                    window.location.href = 'http://117.72.35.241:8080/WebConnect/index.html'; // 假设登录成功后跳转到主页  
+                }  
+            } catch (error) {  
+                document.getElementById('loginMessage').innerText = error.message;  
+            }  
+        });  
+
+        // 为注册界面的注册按钮添加点击事件监听器，使其具有注册功能
+        document.getElementById('registerSubmitBtn').addEventListener('click', async function () {
+            const registerUsername = document.getElementById('registerUsername').value.trim();
+            const registerPassword = document.getElementById('registerPassword').value.trim();
+            const registerEmail = document.getElementById('registerEmail').value.trim();
+            if (!registerUsername || !registerPassword || !registerEmail) {
+        document.getElementById('registerMessage').innerText = '用户名、密码和电子邮箱不能为空';
+        return;
+    }
+
+            try {
+                const registerData = await sendRegisterRequest(registerUsername, registerPassword, registerEmail);
+                document.getElementById('registerMessage').innerText = registerData.message || '注册成功';
+                // 这里可能想要清空注册表单或者关闭注册窗口，视具体需求而定
+            } catch (error) {
+                document.getElementById('registerMessage').innerText = error.message;
+            }
+        });
+    </script> 
+</body>
+</html>

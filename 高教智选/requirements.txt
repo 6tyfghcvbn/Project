@@ -1,0 +1,10 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+pymysql==1.0.2
+werkzeug==2.3.7
+requests==2.31.0
+python-dotenv==1.2.2
+langchain==0.2.16
+langchain-openai==0.1.21
+scikit-learn==1.8.0
+selenium==4.15.2

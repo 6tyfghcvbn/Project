@@ -1,0 +1,185 @@
+body {  
+    margin: 0;  
+    padding: 0;  
+    background-image: url(img/map_bg.jpg);  
+    background-size: cover;  /* 根据窗口大小调整背景图的大小 */  
+    background-attachment: fixed;  /* 背景图片固定不动，页面内容滚动时背景不动 */
+}
+header {  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+    padding: 20px;  
+  
+}  
+  
+header {  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+    padding: 20px;  
+  
+}  
+  
+.site-title {  
+    margin-left: 20px; /* 调整标题距离左边的距离 */
+    color: white;  
+}  
+  
+.navbar {  
+    display: flex;  
+    justify-content: center;
+    flex: 1; 
+}  
+  
+.navbar ul {  
+    list-style: none;  
+    padding: 0;  
+    margin: 0;  
+    display: flex;
+    color: cyan;  
+}  
+  
+.navbar ul li {  
+    margin: 0 10px; /* 调整导航元素之间的间距 */  
+}
+.container {  
+    display: flex; /* 使用flex布局 */  
+    justify-content: space-between; /* 子元素之间有空隙 */  
+    padding: 20px; /* 容器内边距 */  
+}  
+  
+.car-info-column, .other-content-column {  
+    flex: 1; /* 两列等宽 */  
+}  
+  
+.car-info-header {  
+    display: flex;  
+    align-items: center;  
+    margin-bottom: 20px; /* 表单之前的间距 */  
+}  
+  
+.car-image {  
+    width: 100px; /* 图片宽度 */  
+    height: auto; /* 图片高度自适应 */  
+    margin-right: 20px; /* 图片与标题之间的间距 */  
+}  
+  
+.car-info-title {  
+    color: white; /* 标题颜色 */  
+}  
+
+#predictionForm label,
+#predictionForm span {
+    color: white; /* 字体颜色设为白色 */
+}
+
+#predictionForm input[type="number"] {
+    background-color: transparent; /* 输入框背景透明 */
+    border: 1px solid white; /* 边框为白色，以便可见 */
+    color: white; /* 输入文字颜色为白色 */
+    padding: 5px; /* 输入框内边距，提升用户体验 */
+}
+
+/* 为了确保选中下拉菜单的文本也为白色 */
+#predictionForm select, #predictionForm option {
+    color: black;
+    background-color: transparent;
+}
+
+#predictionForm select option:checked {
+    color: black; /* 选中时的颜色（黑色） */
+  }
+  
+  #predictionForm select {
+    appearance: none; /* 去掉默认样式 */
+    background-color: transparent; /* 透明背景 */
+    border: 1px solid white; /* 白色边框 */
+    color: white; /* 输入框内的文字颜色（白色） */
+    padding: 5px;
+  }
+  
+  #predictionForm select option {
+    color: white; /* 非选中时的颜色（白色） */
+  }
+
+
+#predictionForm button {
+    background-color: #af4c8c;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+#predictionForm select option {
+    color: black; /* 下拉菜单展开时选项文字颜色为黑色 */
+  }
+  #result {
+    color: white; /* 设置字体颜色为白色 */
+}
+.content-box{
+    color: yellow;
+    border-color:white ;
+    border: 1px;
+}
+/* 新增样式，让段落和链接同行显示 */
+
+.content-box {
+    display: flex; /* 将.content-box设为Flex容器 */
+    align-items: center; /* 垂直居中对齐 */
+    justify-content: space-between; /* 在Flex项目间分配空间，首尾靠边 */
+  }
+.text-container {
+    flex: 1; /* 允许文本容器占据剩余空间 */
+  }  
+
+.content-box a {
+    margin-left: 10px; /* 给链接与段落之间添加一些间距 */
+    text-decoration: underline; /* 可选，给链接加上下划线以示区分 */
+    color: cyan;
+}
+.dropdown {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    min-width: 120px;
+    max-height: 250px; /* 调整为合适的最大高度，以适应滚动条 */
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.dropdown.hidden {
+    display: none;
+}
+
+.dropdown .province-list {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown .province-list a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown .province-list a:hover {
+    background-color: #f1f1f1;
+}
+.navbar li a {
+    color: cyan;
+    text-decoration: none;
+}
+.navbar ul li {
+    margin: 0 10px; /* 保持原有的间距设置 */
+    font-size: 30px; /* 增加字体大小，例如设置为18px */
+}
+#province-link {
+    font-size: 30px; /* 根据需要调整字体大小 */
+}

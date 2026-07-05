@@ -1,0 +1,113 @@
+body {  
+    margin: 0;  
+    padding: 0;  
+    background-image: url(img/map_bg.jpg);  
+    background-size: cover;  /* 根据窗口大小调整背景图的大小 */  
+    background-attachment: fixed;  /* 背景图片固定不动，页面内容滚动时背景不动 */
+}
+header {  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+    padding: 20px;  
+  
+}  
+  
+.site-title {  
+    margin-left: 20px; /* 调整标题距离左边的距离 */
+    color: white;  
+}  
+  
+.navbar {  
+    display: flex;  
+    justify-content: center;
+    flex: 1; 
+}  
+  
+.navbar ul {  
+    list-style: none;  
+    padding: 0;  
+    margin: 0;  
+    display: flex;
+    color: cyan;  
+}  
+  
+.navbar ul li {  
+    margin: 0 10px; /* 调整导航元素之间的间距 */  
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+.left, .center, .right {
+    flex: 1;
+    padding: 20px;
+}
+.left iframe {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+}
+.center iframe{
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+    border: none;
+}
+.right iframe{
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+}
+.center img, .right img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+.navbar ul li a{
+    color:cyan;
+}
+iframe{
+    border: none;
+}
+.dropdown {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    min-width: 120px;
+    max-height: 250px; /* 调整为合适的最大高度，以适应滚动条 */
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.dropdown.hidden {
+    display: none;
+}
+
+.dropdown .province-list {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown .province-list a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown .province-list a:hover {
+    background-color: #f1f1f1;
+}
+.navbar li a {
+    color: cyan;
+    text-decoration: none;
+}
+.navbar ul li {
+    margin: 0 10px; /* 保持原有的间距设置 */
+    font-size: 30px; /* 增加字体大小，例如设置为18px */
+}
+#province-link {
+    font-size: 30px; /* 根据需要调整字体大小 */
+}

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+   <link rel="stylesheet" href="style1.css">
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>predict</title>
+    <script>  
+        function sendPredictionRequest() {  
+            // 获取表单输入  
+            var formData = new FormData(document.getElementById('predictionForm'));  
+              
+            // 转换为JSON对象  
+            var data = {};  
+            for (var pair of formData.entries()) {  
+                data[pair[0]] = pair[1];  
+            }  
+              
+            // 发送POST请求到Flask API  
+            fetch('http://117.72.35.241:5000/predict', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },  
+                body: JSON.stringify(data)  
+            })  
+            .then(response => response.json())  
+            .then(data => {  
+                // 显示预测结果  
+                document.getElementById('result').textContent = '预测价格: ' +  data.predicted_price+ '万';  
+            })  
+            .catch(error => {  
+                console.error('Error:', error);  
+                document.getElementById('result').textContent = '预测出错，请重试。';  
+            });  
+        }  
+        $(document).ready(function() {
+  $('#predictionForm select').on('change', function() {
+    $(this).css('color', 'white'); // 设置输入框文字颜色为白色
+    $(this).find(':selected').css('color', 'black'); // 设置选中项颜色为黑色
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+        const provinceLink = document.getElementById('province-link');
+        const provinceDropdown = document.getElementById('province-dropdown');
+
+        // 省份链接 mouseover 事件处理程序
+        const showProvinceDropdown = function () {
+            provinceDropdown.classList.remove('hidden');
+        };
+
+        // 省份链接 mouseout 事件处理程序
+        const hideProvinceDropdownFromLink = function (event) {
+            if (!provinceDropdown.contains(event.relatedTarget)) {
+                hideProvinceDropdown();
+            }
+        };
+
+        // 省份列表 mouseout 事件处理程序
+        const checkMouseLeaveProvinceDropdown = function (event) {
+            const rect = provinceDropdown.getBoundingClientRect();
+            const isOutsideDropdown = (
+                event.clientX < rect.left ||
+                event.clientX > rect.right ||
+                event.clientY < rect.top ||
+                event.clientY > rect.bottom
+            );
+
+            if (isOutsideDropdown && !provinceLink.contains(event.relatedTarget)) {
+                hideProvinceDropdown();
+            }
+        };
+
+        // 隐藏省份列表的通用函数
+        const hideProvinceDropdown = function () {
+            provinceDropdown.classList.add('hidden');
+        };
+
+        // 添加事件监听器
+        provinceLink.addEventListener('mouseover', showProvinceDropdown);
+        provinceLink.addEventListener('mouseout', hideProvinceDropdownFromLink);
+        provinceDropdown.addEventListener('mouseout', checkMouseLeaveProvinceDropdown);
+    });
+    </script>
+</head>
+<body>
+    <header>  
+        <h2 class="site-title">二手车估价平台</h2>  
+        <nav class="navbar">  
+            <ul>  
+                <li><a href="index.html" target="_self" >首页</a></li>  
+                <li><a href="predict.html" target="_self">在线预测</a></li>  
+            </ul>
+            <li>
+                <a href="#" id="province-link" target="_self">省份信息</a>
+                <div id="province-dropdown" class="dropdown hidden">
+                    <div class="province-list">
+                        <a href="beijing.html">北京</a>
+                        <a href="shanghai.html">上海</a>
+                        <a href="shanxi.html">山西</a>
+                        <a href="liaoning.html">辽宁</a>
+                        <a href="jilin.html">吉林</a>
+                        <a href="heilongjiang.html">黑龙江</a>
+                        <a href="jiangsu.html">江苏</a>
+                        <a href="zhejiang.html">浙江</a>
+                        <a href="anhui.html">安徽</a>
+                        <a href="fujian.html">福建</a>
+                        <a href="jiangxi.html">江西</a>
+                        <a href="shandong.html">山东</a>
+                        <a href="henan.html">河南</a>
+                        <a href="hubei.html">湖北</a>
+                        <a href="hunan.html">湖南</a>
+                        <a href="guangdong.html">广东</a>
+                        <a href="hainan.html">海南</a>
+                        <a href="sichuan.html">四川</a>
+                        <a href="guizhou.html">贵州</a>
+                        <a href="yunnan.html">云南</a>
+                        <a href="shaanxi.html">陕西</a>
+                        <a href="gansu.html">甘肃</a>
+                        <a href="qinghai.html">青海</a>
+                        <a href="taiwan.html">台湾</a>
+                        <a href="neimenggu.html">内蒙古</a>
+                        <a href="guangxi.html">广西</a>
+                        <a href="xizang.html">西藏</a>
+                        <a href="ningxia.html">宁夏</a>
+                        <a href="xinjiang.html">新疆</a>
+                        <a href="hongkong.html">香港</a>
+                        <a href="aomen.html">澳门</a>
+                        <a href="tianjin.html">天津</a>
+                        <a href="chongqin.html">重庆</a>
+                    </div>
+                </div>
+            </li>
+        </nav>  
+    </header>
+    <div class="container">  
+        <div class="car-info-column">  
+            <div class="car-info-header">  
+                <img src="img/1353493230140ke4conuuem.jpg" alt="二手车图片" class="car-image">  
+                <h2 class="car-info-title">二手车资料</h2>  
+            </div>  
+            <form id="predictionForm">  
+                <!-- 表单项 -->  
+                <div>  
+                    <label for="height">高度:</label>  
+                    <input type="number" id="height" name="高度(mm)" min="0" step="any">  
+                    <span class="_height">mm</span>  
+                </div>
+                <div>  
+                    <label for="width">宽度:</label>  
+                    <input type="number" id="width" name="宽度(mm)" min="0" step="any">  
+                    <span class="_width">mm</span>  
+                </div>
+                <div>  
+                    <label for="wheelbase">轴距:</label>  
+                    <input type="number" id="wheelbase" name="轴距(mm)" min="0" step="any">  
+                    <span class="_wheelbase">mm</span>  
+                </div>
+                <div>  
+                    <label for="length">长度:</label>  
+                    <input type="number" id="length" name="长度(mm)" min="0" step="any">  
+                    <span class="_length">mm</span>  
+                </div>
+                <div>  
+                    <label for="displacement">排量:</label>  
+                    <input type="number" id="displacement" name="排量(L)" min="0" step="any">  
+                    <span class="_displacement">L</span>  
+                </div>
+                <div>  
+                    <label for="track_rear">后轮距:</label>  
+                    <input type="number" id="track_rear" name="后轮距(mm)" min="0" step="any">  
+                    <span class="track-rear">mm</span>  
+                </div>
+                <div>  
+                    <label for="front_track_rear">前轮距:</label>  
+                    <input type="number" id="front_track_rear" name="前轮距(mm)" min="0" step="any">  
+                    <span class="front-track-rear">mm</span>  
+                </div>
+                <div>  
+                    <label for="rate">压缩比:</label>  
+                    <input type="number" id="rate" name="压缩比" min="0" step="any">  
+                    <span class="_rate"></span>  
+                </div>
+                <div>
+                    <label for="new_sale_price">新车售价:</label>
+                    <input type="number" id="new_sale_price" name="新车售价" min="0" step="any">
+                    <span class="new-unit-hint">万</span>
+                </div>
+                <div>
+                    <label for="max_ml">最大马力:</label>
+                    <input type="number" id="max_ml" name="最大马力(Ps)" min="0" step="any">
+                    <span class="max-ml">Ps</span>
+                </div>
+                <div>
+                    <label for="max_kw">最大功率:</label>
+                    <input type="number" id="max_kw" name="最大功率(kw)" min="0" step="any">
+                    <span class="max-kw">Kw</span>
+                </div>
+                <div>
+                    <label for="meter">行驶里程:</label>
+                    <input type="number" id="meter" name="行驶里程" min="0" step="any">
+                    <span class="meter_">公里</span>
+                </div>
+                <div>
+                    <label for="heavy">整备质量:</label>
+                    <input type="number" id="heavy" name="整备质量(kg)" min="0" step="any">
+                    <span class="heavy_">kg</span>
+                </div>
+                <div>
+                    <label for="max_speed">最高车速:</label>
+                    <input type="number" id="max_speed" name="最高车速(km/h)" min="0" step="any">
+                    <span class="max-speed">km/h</span>
+                </div>
+                <div>
+                    <label for="volume">油箱容积:</label>
+                    <input type="number" id="volume" name="油箱容积(L)" min="0" step="any">
+                    <span class="_volume">L</span>
+                </div>
+                <div>
+                    <label for="max_torque">最大扭矩:</label>
+                    <input type="number" id="max_torque" name="最大扭矩(N·m)" min="0" step="any">
+                    <span class="max-torquee">N*m</span>
+                </div>
+                <div>
+                    <label for="first_day">出厂日期差:</label>
+                    <input type="number" id="first_day" name="出厂日期差(天)" min="0" step="any">
+                    <span class="first_day">天</span>
+                </div>
+                <div>
+                    <label for="day">注册日期差:</label>
+                    <input type="number" id="day" name="注册日期差(天)" min="0" step="any">
+                    <span class="_day">天</span>
+                </div>
+                <div>
+                    <label for="luggage">行李厢容积:</label>
+                    <input type="number" id="luggage" name="行李厢容积(L)" min="0" step="any">
+                    <span class="_luggage">L</span>
+                </div>
+                <div>
+                    <label for="max_rotate_speed">最大功率转速:</label>
+                    <input type="number" id="max_rotate_speed" name="最大功率转速(rpm)" min="0" step="any">
+                    <span class="max-rotate-speed">rpm</span>
+                </div>
+                <div>
+                    <label for=torque_speed">最大扭矩转速:</label>
+                    <input type="number" id="torque_speed" name="最大扭矩转速(rpm)" min="0" step="any">
+                    <span class="max-torque">rpm</span>
+                </div>
+                <div>
+                    <label for="gap">最小离地间隙:</label>
+                    <input type="number" id="gap" name="最小离地间隙(mm)" min="0" step="any">
+                    <span class="_gap">mm</span>
+                </div>
+                <div>
+                    <label for="fuel_consumption">工信部综合油耗:</label>
+                    <input type="number" id="fuel_consumption" name="工信部综合油耗(L/100km)" min="0" step="any">
+                    <span class="fuel-consumption">L/100Km</span>
+                </div>
+                <div>
+                    <label for="date_difference">商业险过期日期差:</label>
+                    <input type="number" id="date_difference" name="商业险过期日期差(天)" min="0" step="any">
+                    <span class="date-difference">天</span>
+                </div>
+                <div>
+                    <label for="date_difference2">交强险过期日期差:</label>
+                    <input type="number" id="date_difference2" name="交强险过期日期差(天)" min="0" step="any">
+                    <span class="date-difference2">天</span>
+                </div>
+                <div>
+                    <label for="accelerate">官方0-100km/h加速:</label>
+                    <input type="number" id="accelerate" name="官方0-100km/h加速(s)" min="0" step="any">
+                    <span class="_accelerate">s</span>
+                </div> 
+                <div>
+                    <label for="plate_location">车牌所在地:</label>
+                    <select id="plate_location" name="车牌所在地">
+                        <option value="" class="placeholder">请选择</option>
+                        <option value="七台河">七台河</option>
+                        <option value="三亚">三亚</option>
+                        <option value="三明">三明</option>
+                        <option value="三门峡">三门峡</option>
+                        <option value="上海">上海</option>
+                        <option value="上饶">上饶</option>
+                        <option value="东莞">东莞</option>
+                        <option value="东营">东营</option>
+                        <option value="中山">中山</option>
+                        <option value="临夏">临夏</option>
+                        <option value="临汾">临汾</option>
+                        <option value="临沂">临沂</option>
+                        <option value="临沧">临沧</option>
+                        <option value="丹东">丹东</option>
+                        <option value="丽水">丽水</option>
+                        <option value="丽江">丽江</option>
+                        <option value="乌兰察布">乌兰察布</option>
+                        <option value="乌海">乌海</option>
+                        <option value="乌鲁木齐">乌鲁木齐</option>
+                        <option value="乐山">乐山</option>
+                        <option value="九江">九江</option>
+                        <option value="云浮">云浮</option>
+                        <option value="亳州">亳州</option>
+                        <option value="仙桃">仙桃</option>
+                        <option value="伊犁">伊犁</option>
+                        <option value="佛山">佛山</option>
+                        <option value="佳木斯">佳木斯</option>
+                        <option value="保定">保定</option>
+                        <option value="保山">保山</option>
+                        <option value="信阳">信阳</option>
+                        <option value="儋州">儋州</option>
+                        <option value="六安">六安</option>
+                        <option value="六盘水">六盘水</option>
+                        <option value="兰州">兰州</option>
+                        <option value="兴安">兴安</option>
+                        <option value="内江">内江</option>
+                        <option value="凉山">凉山</option>
+                        <option value="包头">包头</option>
+                        <option value="北京">北京</option>
+                        <option value="北海">北海</option>
+                        <option value="十堰">十堰</option>
+                        <option value="南京">南京</option>
+                        <option value="南充">南充</option>
+                        <option value="南宁">南宁</option>
+                        <option value="南平">南平</option>
+                        <option value="南昌">南昌</option>
+                        <option value="南昌/省直系统">南昌/省直系统</option>
+                        <option value="南通">南通</option>
+                        <option value="南阳">南阳</option>
+                        <option value="厦门">厦门</option>
+                        <option value="双鸭山">双鸭山</option>
+                        <option value="台州">台州</option>
+                        <option value="合肥">合肥</option>
+                        <option value="吉安">吉安</option>
+                        <option value="吉林">吉林</option>
+                        <option value="吐鲁番">吐鲁番</option>
+                        <option value="吕梁">吕梁</option>
+                        <option value="吴忠">吴忠</option>
+                        <option value="周口">周口</option>
+                        <option value="呼伦贝尔">呼伦贝尔</option>
+                        <option value="呼和浩特">呼和浩特</option>
+                        <option value="咸宁">咸宁</option>
+                        <option value="咸阳">咸阳</option>
+                        <option value="哈尔滨">哈尔滨</option>
+                        <option value="唐山">唐山</option>
+                        <option value="商丘">商丘</option>
+                        <option value="商洛">商洛</option>
+                        <option value="喀什">喀什</option>
+                        <option value="嘉兴">嘉兴</option>
+                        <option value="嘉峪关">嘉峪关</option>
+                        <option value="四平">四平</option>
+                        <option value="固原">固原</option>
+                        <option value="大兴安岭">大兴安岭</option>
+                        <option value="大同">大同</option>
+                        <option value="大庆">大庆</option>
+                        <option value="大理">大理</option>
+                        <option value="大连">大连</option>
+                        <option value="天水">天水</option>
+                        <option value="天津">天津</option>
+                        <option value="天门">天门</option>
+                        <option value="太原">太原</option>
+                        <option value="奎屯">奎屯</option>
+                        <option value="威海">威海</option>
+                        <option value="娄底">娄底</option>
+                        <option value="孝感">孝感</option>
+                        <option value="宁德">宁德</option>
+                        <option value="宁波">宁波</option>
+                        <option value="安庆">安庆</option>
+                        <option value="安康">安康</option>
+                        <option value="安阳">安阳</option>
+                        <option value="安顺">安顺</option>
+                        <option value="定西">定西</option>
+                        <option value="宜宾">宜宾</option>
+                        <option value="宜昌">宜昌</option>
+                        <option value="宜春">宜春</option>
+                        <option value="宝鸡">宝鸡</option>
+                        <option value="宣城">宣城</option>
+                        <option value="宿州">宿州</option>
+                        <option value="宿迁">宿迁</option>
+                        <option value="岳阳">岳阳</option>
+                        <option value="崇左">崇左</option>
+                        <option value="巴中">巴中</option>
+                        <option value="巴彦淖尔">巴彦淖尔</option>
+                        <option value="巴音郭楞">巴音郭楞</option>
+                        <option value="常州">常州</option>
+                        <option value="常德">常德</option>
+                        <option value="平凉">平凉</option>
+                        <option value="平潭">平潭</option>
+                        <option value="平顶山">平顶山</option>
+                        <option value="广元">广元</option>
+                        <option value="广安">广安</option>
+                        <option value="广州">广州</option>
+                        <option value="庆阳">庆阳</option>
+                        <option value="廊坊">廊坊</option>
+                        <option value="延安">延安</option>
+                        <option value="延边">延边</option>
+                        <option value="开封">开封</option>
+                        <option value="张家口">张家口</option>
+                        <option value="张家界">张家界</option>
+                        <option value="张掖">张掖</option>
+                        <option value="徐州">徐州</option>
+                        <option value="德宏">德宏</option>
+                        <option value="德州">德州</option>
+                        <option value="德阳">德阳</option>
+                        <option value="忻州">忻州</option>
+                        <option value="怀化">怀化</option>
+                        <option value="恩施">恩施</option>
+                        <option value="惠州">惠州</option>
+                        <option value="成都">成都</option>
+                        <option value="扬州">扬州</option>
+                        <option value="承德">承德</option>
+                        <option value="抚州">抚州</option>
+                        <option value="抚顺">抚顺</option>
+                        <option value="拉萨">拉萨</option>
+                        <option value="揭阳">揭阳</option>
+                        <option value="攀枝花">攀枝花</option>
+                        <option value="文山">文山</option>
+                        <option value="新乡">新乡</option>
+                        <option value="新余">新余</option>
+                        <option value="无锡">无锡</option>
+                        <option value="日照">日照</option>
+                        <option value="昆明">昆明</option>
+                        <option value="昌吉">昌吉</option>
+                        <option value="昭通">昭通</option>
+                        <option value="晋中">晋中</option>
+                        <option value="晋城">晋城</option>
+                        <option value="景德镇">景德镇</option>
+                        <option value="曲靖">曲靖</option>
+                        <option value="朔州">朔州</option>
+                        <option value="朝阳">朝阳</option>
+                        <option value="本溪">本溪</option>
+                        <option value="来宾">来宾</option>
+                        <option value="杨凌">杨凌</option>
+                        <option value="杭州">杭州</option>
+                        <option value="松原">松原</option>
+                        <option value="枣庄">枣庄</option>
+                        <option value="柳州">柳州</option>
+                        <option value="株洲">株洲</option>
+                        <option value="桂林">桂林</option>
+                        <option value="梅州">梅州</option>
+                        <option value="梧州">梧州</option>
+                        <option value="楚雄">楚雄</option>
+                        <option value="榆林">榆林</option>
+                        <option value="武威">武威</option>
+                        <option value="武汉">武汉</option>
+                        <option value="毕节">毕节</option>
+                        <option value="永州">永州</option>
+                        <option value="汉中">汉中</option>
+                        <option value="汕头">汕头</option>
+                        <option value="汕尾">汕尾</option>
+                        <option value="江门">江门</option>
+                        <option value="池州">池州</option>
+                        <option value="沈阳">沈阳</option>
+                        <option value="沧州">沧州</option>
+                        <option value="河池">河池</option>
+                        <option value="河源">河源</option>
+                        <option value="泉州">泉州</option>
+                        <option value="泰安">泰安</option>
+                        <option value="泰州">泰州</option>
+                        <option value="泸州">泸州</option>
+                        <option value="洋浦经济开发区">洋浦经济开发区</option>
+                        <option value="洛阳">洛阳</option>
+                        <option value="济南">济南</option>
+                        <option value="济宁">济宁</option>
+                        <option value="济源">济源</option>
+                        <option value="海口">海口</option>
+                        <option value="淄博">淄博</option>
+                        <option value="淮北">淮北</option>
+                        <option value="淮南">淮南</option>
+                        <option value="淮安">淮安</option>
+                        <option value="深圳">深圳</option>
+                        <option value="清远">清远</option>
+                        <option value="温州">温州</option>
+                        <option value="渭南">渭南</option>
+                        <option value="湖州">湖州</option>
+                        <option value="湘潭">湘潭</option>
+                        <option value="湘西">湘西</option>
+                        <option value="湛江">湛江</option>
+                        <option value="滁州">滁州</option>
+                        <option value="滨州">滨州</option>
+                        <option value="漯河">漯河</option>
+                        <option value="漳州">漳州</option>
+                        <option value="潍坊">潍坊</option>
+                        <option value="潜江">潜江</option>
+                        <option value="潮州">潮州</option>
+                        <option value="濮阳">濮阳</option>
+                        <option value="烟台">烟台</option>
+                        <option value="焦作">焦作</option>
+                        <option value="牡丹江">牡丹江</option>
+                        <option value="玉林">玉林</option>
+                        <option value="玉树">玉树</option>
+                        <option value="玉溪">玉溪</option>
+                        <option value="珠海">珠海</option>
+                        <option value="琼海">琼海</option>
+                        <option value="甘南">甘南</option>
+                        <option value="白城">白城</option>
+                        <option value="白山">白山</option>
+                        <option value="白银">白银</option>
+                        <option value="百色">百色</option>
+                        <option value="益阳">益阳</option>
+                        <option value="盐城">盐城</option>
+                        <option value="盘锦">盘锦</option>
+                        <option value="眉山">眉山</option>
+                        <option value="石嘴山">石嘴山</option>
+                        <option value="石家庄">石家庄</option>
+                        <option value="石河子">石河子</option>
+                        <option value="福州">福州</option>
+                        <option value="秦皇岛">秦皇岛</option>
+                        <option value="红河">红河</option>
+                        <option value="绍兴">绍兴</option>
+                        <option value="绥化">绥化</option>
+                        <option value="绵阳">绵阳</option>
+                        <option value="聊城">聊城</option>
+                        <option value="肇庆">肇庆</option>
+                        <option value="自贡">自贡</option>
+                        <option value="舟山">舟山</option>
+                        <option value="芜湖">芜湖</option>
+                        <option value="苏州">苏州</option>
+                        <option value="茂名">茂名</option>
+                        <option value="荆州">荆州</option>
+                        <option value="荆门">荆门</option>
+                        <option value="莆田">莆田</option>
+                        <option value="莱芜">莱芜</option>
+                        <option value="菏泽">菏泽</option>
+                        <option value="萍乡">萍乡</option>
+                        <option value="营口">营口</option>
+                        <option value="葫芦岛">葫芦岛</option>
+                        <option value="蚌埠">蚌埠</option>
+                        <option value="衡水">衡水</option>
+                        <option value="衡阳">衡阳</option>
+                        <option value="衢州">衢州</option>
+                        <option value="襄阳">襄阳</option>
+                        <option value="西双版纳">西双版纳</option>
+                        <option value="西宁">西宁</option>
+                        <option value="西安">西安</option>
+                        <option value="许昌">许昌</option>
+                        <option value="贵港">贵港</option>
+                        <option value="贵阳">贵阳</option>
+                        <option value="贺州">贺州</option>
+                        <option value="资阳">资阳</option>
+                        <option value="赣州">赣州</option>
+                        <option value="赤峰">赤峰</option>
+                        <option value="辽源">辽源</option>
+                        <option value="辽阳">辽阳</option>
+                        <option value="达州">达州</option>
+                        <option value="运城">运城</option>
+                        <option value="连云港">连云港</option>
+                        <option value="迪庆">迪庆</option>
+                        <option value="通化">通化</option>
+                        <option value="通辽">通辽</option>
+                        <option value="遂宁">遂宁</option>
+                        <option value="遵义">遵义</option>
+                        <option value="邢台">邢台</option>
+                        <option value="邯郸">邯郸</option>
+                        <option value="邵阳">邵阳</option>
+                        <option value="郑州">郑州</option>
+                        <option value="郴州">郴州</option>
+                        <option value="鄂尔多斯">鄂尔多斯</option>
+                        <option value="鄂州">鄂州</option>
+                        <option value="酒泉">酒泉</option>
+                        <option value="重庆">重庆</option>
+                        <option value="金华">金华</option>
+                        <option value="钦州">钦州</option>
+                        <option value="铁岭">铁岭</option>
+                        <option value="铜仁">铜仁</option>
+                        <option value="铜川">铜川</option>
+                        <option value="铜陵">铜陵</option>
+                        <option value="银川">银川</option>
+                        <option value="锡林郭勒">锡林郭勒</option>
+                        <option value="锦州">锦州</option>
+                        <option value="镇江">镇江</option>
+                        <option value="长春">长春</option>
+                        <option value="长沙">长沙</option>
+                        <option value="长治">长治</option>
+                        <option value="长白山">长白山</option>
+                        <option value="阜新">阜新</option>
+                        <option value="阜阳">阜阳</option>
+                        <option value="防城港">防城港</option>
+                        <option value="阳江">阳江</option>
+                        <option value="阳泉">阳泉</option>
+                        <option value="阿克苏">阿克苏</option>
+                        <option value="阿勒泰">阿勒泰</option>
+                        <option value="阿坝">阿坝</option>
+                        <option value="阿拉善">阿拉善</option>
+                        <option value="阿里">阿里</option>
+                        <option value="陇南">陇南</option>
+                        <option value="随州">随州</option>
+                        <option value="雅安">雅安</option>
+                        <option value="青岛">青岛</option>
+                        <option value="鞍山">鞍山</option>
+                        <option value="韶关">韶关</option>
+                        <option value="马鞍山">马鞍山</option>
+                        <option value="驻马店">驻马店</option>
+                        <option value="鸡西">鸡西</option>
+                        <option value="鹤壁">鹤壁</option>
+                        <option value="鹤岗">鹤岗</option>
+                        <option value="鹰潭">鹰潭</option>
+                        <option value="黄冈">黄冈</option>
+                        <option value="黄山">黄山</option>
+                        <option value="黄石">黄石</option>
+                        <option value="黑河">黑河</option>
+                        <option value="黑龙江/农垦系统">黑龙江/农垦系统</option>
+                        <option value="黔东南">黔东南</option>
+                        <option value="黔南">黔南</option>
+                        <option value="黔西南">黔西南</option>
+                        <option value="齐齐哈尔">齐齐哈尔</option>
+                        <option value="龙岩">龙岩</option>
+                    </select>
+                <div>
+                    <label for="manufacturer">厂商:</label>
+                    <select id="manufacturer" name="厂商">
+                        <option value="" class="placeholder">请选择</option>
+                        <option value="AudiSport">AudiSport</option>
+                        <option value="BEIJING汽车">BEIJING汽车</option>
+                        <option value="DS(进口)">DS(进口)</option>
+                        <option value="GMC">GMC</option>
+                        <option value="Jeep(进口)">Jeep(进口)</option>
+                        <option value="MINI">MINI</option>
+                        <option value="MINIJCW">MINIJCW</option>
+                        <option value="SRM鑫源新能源">SRM鑫源新能源</option>
+                        <option value="SRT">SRT</option>
+                        <option value="SWM斯威汽车">SWM斯威汽车</option>
+                        <option value="smart">smart</option>
+                        <option value="一汽-大众">一汽-大众</option>
+                        <option value="一汽-大众奥迪">一汽-大众奥迪</option>
+                        <option value="一汽-大众捷达">一汽-大众捷达</option>
+                        <option value="一汽丰田">一汽丰田</option>
+                        <option value="一汽凌源">一汽凌源</option>
+                        <option value="一汽吉林">一汽吉林</option>
+                        <option value="一汽奔腾">一汽奔腾</option>
+                        <option value="一汽欧朗">一汽欧朗</option>
+                        <option value="一汽海马">一汽海马</option>
+                        <option value="一汽红旗">一汽红旗</option>
+                        <option value="一汽马自达">一汽马自达</option>
+                        <option value="三菱(进口)">三菱(进口)</option>
+                        <option value="上汽大众">上汽大众</option>
+                        <option value="上汽大众斯柯达">上汽大众斯柯达</option>
+                        <option value="上汽大通">上汽大通</option>
+                        <option value="上汽大通MAXUS">上汽大通MAXUS</option>
+                        <option value="上汽斯柯达">上汽斯柯达</option>
+                        <option value="上汽通用五菱">上汽通用五菱</option>
+                        <option value="上汽通用凯迪拉克">上汽通用凯迪拉克</option>
+                        <option value="上汽通用别克">上汽通用别克</option>
+                        <option value="上汽通用雪佛兰">上汽通用雪佛兰</option>
+                        <option value="上汽集团">上汽集团</option>
+                        <option value="东南汽车">东南汽车</option>
+                        <option value="东风乘用车">东风乘用车</option>
+                        <option value="东风启辰">东风启辰</option>
+                        <option value="东风小康">东风小康</option>
+                        <option value="东风悦达起亚">东风悦达起亚</option>
+                        <option value="东风日产">东风日产</option>
+                        <option value="东风本田">东风本田</option>
+                        <option value="东风标致">东风标致</option>
+                        <option value="东风汽车">东风汽车</option>
+                        <option value="东风英菲尼迪">东风英菲尼迪</option>
+                        <option value="东风裕隆">东风裕隆</option>
+                        <option value="东风雪铁龙">东风雪铁龙</option>
+                        <option value="东风雷诺">东风雷诺</option>
+                        <option value="东风风行">东风风行</option>
+                        <option value="中兴汽车">中兴汽车</option>
+                        <option value="丰田(进口)">丰田(进口)</option>
+                        <option value="九龙汽车">九龙汽车</option>
+                        <option value="云度新能源">云度新能源</option>
+                        <option value="众泰汽车">众泰汽车</option>
+                        <option value="保时捷">保时捷</option>
+                        <option value="克莱斯勒(进口)">克莱斯勒(进口)</option>
+                        <option value="兰博基尼">兰博基尼</option>
+                        <option value="几何汽车">几何汽车</option>
+                        <option value="凯翼汽车">凯翼汽车</option>
+                        <option value="凯迪拉克(进口)">凯迪拉克(进口)</option>
+                        <option value="别克(进口)">别克(进口)</option>
+                        <option value="力帆汽车">力帆汽车</option>
+                        <option value="劳斯莱斯">劳斯莱斯</option>
+                        <option value="北京克莱斯勒">北京克莱斯勒</option>
+                        <option value="北京吉普">北京吉普</option>
+                        <option value="北京奔驰">北京奔驰</option>
+                        <option value="北京汽车">北京汽车</option>
+                        <option value="北京汽车制造厂">北京汽车制造厂</option>
+                        <option value="北京现代">北京现代</option>
+                        <option value="北京越野">北京越野</option>
+                        <option value="北汽新能源">北汽新能源</option>
+                        <option value="北汽昌河">北汽昌河</option>
+                        <option value="北汽银翔">北汽银翔</option>
+                        <option value="华晨中华">华晨中华</option>
+                        <option value="华晨华颂">华晨华颂</option>
+                        <option value="华晨宝马">华晨宝马</option>
+                        <option value="华晨鑫源">华晨鑫源</option>
+                        <option value="华晨雷诺">华晨雷诺</option>
+                        <option value="华普汽车">华普汽车</option>
+                        <option value="华泰新能源">华泰新能源</option>
+                        <option value="华泰汽车">华泰汽车</option>
+                        <option value="南京依维柯">南京依维柯</option>
+                        <option value="南京菲亚特">南京菲亚特</option>
+                        <option value="厦门金旅">厦门金旅</option>
+                        <option value="厦门金龙">厦门金龙</option>
+                        <option value="双环汽车">双环汽车</option>
+                        <option value="双龙汽车">双龙汽车</option>
+                        <option value="合众汽车">合众汽车</option>
+                        <option value="吉利新能源">吉利新能源</option>
+                        <option value="吉利汽车">吉利汽车</option>
+                        <option value="君马汽车">君马汽车</option>
+                        <option value="哈飞汽车">哈飞汽车</option>
+                        <option value="大乘汽车">大乘汽车</option>
+                        <option value="大众(进口)">大众(进口)</option>
+                        <option value="天津一汽">天津一汽</option>
+                        <option value="奇瑞捷豹路虎">奇瑞捷豹路虎</option>
+                        <option value="奇瑞新能源">奇瑞新能源</option>
+                        <option value="奇瑞汽车">奇瑞汽车</option>
+                        <option value="奔驰(进口)">奔驰(进口)</option>
+                        <option value="奥迪(进口)">奥迪(进口)</option>
+                        <option value="威马汽车">威马汽车</option>
+                        <option value="宝沃汽车">宝沃汽车</option>
+                        <option value="宝马(进口)">宝马(进口)</option>
+                        <option value="宝马M">宝马M</option>
+                        <option value="宾利">宾利</option>
+                        <option value="小鹏汽车">小鹏汽车</option>
+                        <option value="巴博斯">巴博斯</option>
+                        <option value="广汽三菱">广汽三菱</option>
+                        <option value="广汽中兴">广汽中兴</option>
+                        <option value="广汽丰田">广汽丰田</option>
+                        <option value="广汽乘用车">广汽乘用车</option>
+                        <option value="广汽吉奥">广汽吉奥</option>
+                        <option value="广汽新能源">广汽新能源</option>
+                        <option value="广汽本田">广汽本田</option>
+                        <option value="广汽菲克Jeep">广汽菲克Jeep</option>
+                        <option value="广汽菲克菲亚特">广汽菲克菲亚特</option>
+                        <option value="广汽讴歌">广汽讴歌</option>
+                        <option value="庆铃汽车">庆铃汽车</option>
+                        <option value="康迪电动汽车集团">康迪电动汽车集团</option>
+                        <option value="开瑞汽车">开瑞汽车</option>
+                        <option value="御捷新能源">御捷新能源</option>
+                        <option value="悍马">悍马</option>
+                        <option value="成功汽车">成功汽车</option>
+                        <option value="捷豹">捷豹</option>
+                        <option value="斯巴鲁">斯巴鲁</option>
+                        <option value="斯柯达(进口)">斯柯达(进口)</option>
+                        <option value="新特汽车">新特汽车</option>
+                        <option value="日产(进口)">日产(进口)</option>
+                        <option value="昌河铃木">昌河铃木</option>
+                        <option value="曙光汽车">曙光汽车</option>
+                        <option value="本田(进口)">本田(进口)</option>
+                        <option value="林肯">林肯</option>
+                        <option value="林肯(进口)">林肯(进口)</option>
+                        <option value="标致(进口)">标致(进口)</option>
+                        <option value="梅赛德斯-AMG">梅赛德斯-AMG</option>
+                        <option value="梅赛德斯-迈巴赫">梅赛德斯-迈巴赫</option>
+                        <option value="欧宝">欧宝</option>
+                        <option value="比亚迪">比亚迪</option>
+                        <option value="比速汽车">比速汽车</option>
+                        <option value="永源汽车">永源汽车</option>
+                        <option value="汉腾汽车">汉腾汽车</option>
+                        <option value="江淮汽车">江淮汽车</option>
+                        <option value="江西五十铃">江西五十铃</option>
+                        <option value="江铃汽车">江铃汽车</option>
+                        <option value="江铃福特">江铃福特</option>
+                        <option value="江铃集团新能源">江铃集团新能源</option>
+                        <option value="沃尔沃(进口)">沃尔沃(进口)</option>
+                        <option value="沃尔沃亚太">沃尔沃亚太</option>
+                        <option value="法拉利">法拉利</option>
+                        <option value="海马汽车">海马汽车</option>
+                        <option value="潍柴汽车">潍柴汽车</option>
+                        <option value="特斯拉(进口)">特斯拉(进口)</option>
+                        <option value="特斯拉中国">特斯拉中国</option>
+                        <option value="特斯拉（进口）">特斯拉（进口）</option>
+                        <option value="猎豹汽车">猎豹汽车</option>
+                        <option value="玛莎拉蒂">玛莎拉蒂</option>
+                        <option value="现代(进口)">现代(进口)</option>
+                        <option value="理想汽车">理想汽车</option>
+                        <option value="瑞驰新能源">瑞驰新能源</option>
+                        <option value="知豆电动车">知豆电动车</option>
+                        <option value="福建奔驰">福建奔驰</option>
+                        <option value="福汽新龙马">福汽新龙马</option>
+                        <option value="福特(进口)">福特(进口)</option>
+                        <option value="福田汽车">福田汽车</option>
+                        <option value="福迪汽车">福迪汽车</option>
+                        <option value="绵阳金杯">绵阳金杯</option>
+                        <option value="腾势汽车">腾势汽车</option>
+                        <option value="苏州金龙">苏州金龙</option>
+                        <option value="英菲尼迪(进口)">英菲尼迪(进口)</option>
+                        <option value="莲花汽车">莲花汽车</option>
+                        <option value="菲亚特(进口)">菲亚特(进口)</option>
+                        <option value="萨博">萨博</option>
+                        <option value="蔚来">蔚来</option>
+                        <option value="西雅特">西雅特</option>
+                        <option value="观致汽车">观致汽车</option>
+                        <option value="讴歌(进口)">讴歌(进口)</option>
+                        <option value="起亚(进口)">起亚(进口)</option>
+                        <option value="路虎(进口)">路虎(进口)</option>
+                        <option value="迈凯伦">迈凯伦</option>
+                        <option value="道奇(进口)">道奇(进口)</option>
+                        <option value="郑州日产">郑州日产</option>
+                        <option value="野马汽车">野马汽车</option>
+                        <option value="铃木(进口)">铃木(进口)</option>
+                        <option value="长城汽车">长城汽车</option>
+                        <option value="长安凯程">长安凯程</option>
+                        <option value="长安林肯">长安林肯</option>
+                        <option value="长安标致雪铁龙">长安标致雪铁龙</option>
+                        <option value="长安汽车">长安汽车</option>
+                        <option value="长安沃尔沃">长安沃尔沃</option>
+                        <option value="长安福特">长安福特</option>
+                        <option value="长安跨越">长安跨越</option>
+                        <option value="长安轻型车">长安轻型车</option>
+                        <option value="长安铃木">长安铃木</option>
+                        <option value="长安马自达">长安马自达</option>
+                        <option value="阿尔法·罗密欧">阿尔法·罗密欧</option>
+                        <option value="阿尔法・罗密欧">阿尔法・罗密欧</option>
+                        <option value="阿斯顿・马丁">阿斯顿・马丁</option>
+                        <option value="陆风汽车">陆风汽车</option>
+                        <option value="陕汽通家">陕汽通家</option>
+                        <option value="雪佛兰(进口)">雪佛兰(进口)</option>
+                        <option value="雪铁龙(进口)">雪铁龙(进口)</option>
+                        <option value="雷克萨斯">雷克萨斯</option>
+                        <option value="雷诺(进口)">雷诺(进口)</option>
+                        <option value="领克">领克</option>
+                        <option value="马自达(进口)">马自达(进口)</option>
+                        <option value="骐铃汽车">骐铃汽车</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transmission">变速箱:</label>
+                    <select id="transmission" name="变速箱">
+                        <option value="" class="placeholder">请选择</option>
+                        <option value="AudiSport">AudiSport</option>
+                        <option value="10挡手自一体">10挡手自一体</option>
+                        <option value="2挡自动">2挡自动</option>
+                        <option value="4挡手动">4挡手动</option>
+                        <option value="4挡手自一体">4挡手自一体</option>
+                        <option value="4挡自动">4挡自动</option>
+                        <option value="5挡AMT">5挡AMT</option>
+                        <option value="5挡双离合">5挡双离合</option>
+                        <option value="5挡手动">5挡手动</option>
+                        <option value="5挡手自一体">5挡手自一体</option>
+                        <option value="5挡自动">5挡自动</option>
+                        <option value="6挡AMT">6挡AMT</option>
+                        <option value="6挡双离合">6挡双离合</option>
+                        <option value="6挡手动">6挡手动</option>
+                        <option value="6挡手自一体">6挡手自一体</option>
+                        <option value="6挡自动">6挡自动</option>
+                        <option value="7挡双离合">7挡双离合</option>
+                        <option value="7挡手自一体">7挡手自一体</option>
+                        <option value="7挡自动">7挡自动</option>
+                        <option value="8挡双离合">8挡双离合</option>
+                        <option value="8挡手自一体">8挡手自一体</option>
+                        <option value="8挡自动">8挡自动</option>
+                        <option value="9挡手自一体">9挡手自一体</option>
+                        <option value="AMT（组合10挡）">AMT（组合10挡）</option>
+                        <option value="CVT">CVT</option>
+                        <option value="CVT无级变速">CVT无级变速</option>
+                        <option value="CVT无级变速(模拟10挡)">CVT无级变速(模拟10挡)</option>
+                        <option value="CVT无级变速(模拟5挡)">CVT无级变速(模拟5挡)</option>
+                        <option value="CVT无级变速(模拟6挡)">CVT无级变速(模拟6挡)</option>
+                        <option value="CVT无级变速(模拟7挡)">CVT无级变速(模拟7挡)</option>
+                        <option value="CVT无级变速(模拟7挡）">CVT无级变速(模拟7挡）</option>
+                        <option value="CVT无级变速(模拟8挡)">CVT无级变速(模拟8挡)</option>
+                        <option value="CVT无级变速(模拟9挡)">CVT无级变速(模拟9挡)</option>
+                        <option value="E-CVT+自动变速箱（模拟10挡）">E-CVT+自动变速箱（模拟10挡）</option>
+                        <option value="E-CVT无级变速">E-CVT无级变速</option>
+                        <option value="无">无</option>
+                        <option value="电动车单速变速箱">电动车单速变速箱</option>
+                        <option value="自动（模拟10挡）">自动（模拟10挡）</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fuel_type">燃油形式:</label>
+                    <select id="fuel_type" name="燃油形式">
+                        <option value="" class="placeholder">请选择</option>
+                        <option value="CNG/原厂天然气">CNG/原厂天然气</option>
+                        <option value="增程式">增程式</option>
+                        <option value="插电式混合动力">插电式混合动力</option>
+                        <option value="无">无</option>
+                        <option value="柴油">柴油</option>
+                        <option value="汽油">汽油</option>
+                        <option value="汽油+48V轻混系统">汽油+48V轻混系统</option>
+                        <option value="油电混合">油电混合</option>
+                        <option value="纯电动">纯电动</option>
+                    </select>
+                </div>
+            </div>
+                <button type="button" onclick="sendPredictionRequest()">提交</button>  
+            </form>
+            <div id="result"></div>  
+        </div>  
+        <div class="other-content-column">
+            <iframe src="my_charts\页面图11.html"style="width:900px; height:700px; "  frameborder="0"></iframe>
+            <!-- 第一个content-box -->
+            <div class="content-box">
+                <div class="text-container">
+                  <p>中国拥有丰富的二手车资源，车型种类繁多，为海外客户可提供多元化、高品质的二手车。这是我们扩大二手车出口贸易的巨大优势。但我们也要清醒地看到有机遇就有挑战。当前，二手车市场的竞争日趋激烈，品牌建设和市场推广面临一定的压力。其次，海外目标市场的分析和把握具有较多的不确定性，出口手续复杂，物流成本较高，等等这些都会影响二手车出口业务的顺利进行。</p>
+                </div>
+                <a href="http://cada.cn/Trends/info_91_9929.html" class="learn-more">了解更多</a>
+              </div>
+            <!-- 第二个content-box，位于第一个下方 -->。
+            <div class="content-box">
+                <div class="text-container">
+                  <p>买二手车是一件既省钱又环保的选择，但也是一件充满风险和挑战的冒险。如果你不小心，你可能会掉进各种坑里，比如买到事故车、泡水车、火烧车、套牌车等，或者被卖家忽悠、敲诈、欺骗等。</p>
+                </div>
+                <a href="https://baijiahao.baidu.com/s?id=1777927402704045106" class="learn-more">了解更多</a>
+              </div>
+        </div>
+    </div>  
+</body>
+
+</html>
